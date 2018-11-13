@@ -20,5 +20,9 @@ public class Controller {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && MyGDXGame.getGameMode() == GameMode.GAME) {
             game.getBird().Fly();
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && MyGDXGame.getGameMode() == GameMode.MENU) {
+            game.setGameMode(GameMode.GAME);
+            game.getBird().Fly();
+        }
     }
 }

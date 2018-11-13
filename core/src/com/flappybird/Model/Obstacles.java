@@ -21,40 +21,40 @@ public class Obstacles implements Drawable {
         private TextureRegion wall1;
         private TextureRegion wall2;
         private TextureAtlas atlas;
-        private Vector2 pos1;
-        private Vector2 pos2;
+        private Vector2 top;
+        private Vector2 bottom;
         private Vector2 wh;
         private int speed;
 
         Wall(int offset) {
             loadTextures();
-            pos1 = new Vector2(START_X + offset, getRandomHeight());
-            pos2 = new Vector2(START_X + offset, pos1.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
+            top = new Vector2(START_X + offset, getRandomHeight());
+            bottom = new Vector2(START_X + offset, top.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
             wh = new Vector2(WALL_WIDTH, WALL_HEIGHT);
             speed = 4;
         }
 
         private void update() {
-            pos1.x -= speed;
-            pos2.x -= speed;
-            if (pos1.x <= -WALL_WIDTH) {
-                pos1 = new Vector2(START_X + DISTANCE_BTW_WALLS, getRandomHeight());
-                pos2 = new Vector2(START_X + DISTANCE_BTW_WALLS, pos1.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
+            top.x -= speed;
+            bottom.x -= speed;
+            if (top.x <= -WALL_WIDTH) {
+                top = new Vector2(START_X + DISTANCE_BTW_WALLS, getRandomHeight());
+                bottom = new Vector2(START_X + DISTANCE_BTW_WALLS, top.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
             }
         }
 
         private void draw() {
             MyGDXGame.batch.draw(
                     wall1,
-                    pos1.x,
-                    pos1.y,
+                    top.x,
+                    top.y,
                     wh.x,
                     wh.y
             );
             MyGDXGame.batch.draw(
                     wall2,
-                    pos2.x,
-                    pos2.y,
+                    bottom.x,
+                    bottom.y,
                     wh.x,
                     wh.y
             );
@@ -65,7 +65,7 @@ public class Obstacles implements Drawable {
         }
 
         private void loadTextures() {
-            atlas = new TextureAtlas(Gdx.files.internal("wall.atlas"));
+            atlas = new TextureAtlas(Gdx.files.internal("atl/wall.atlas"));
             wall1 = atlas.findRegion("0001");
             wall2 = atlas.findRegion("0002");
         }
@@ -74,10 +74,6 @@ public class Obstacles implements Drawable {
             int lower = Ground.getHeight() + SPACE_BETWEEN_WALLS;
             int upper = Gdx.graphics.getHeight()  - (Ground.getHeight() / 2);
             return new Random().nextInt(upper - lower) + lower;
-        }
-
-        public Vector2 getPos1() {
-            return pos1;
         }
     }
 
@@ -99,78 +95,50 @@ public class Obstacles implements Drawable {
     }
 
     public void update() {
-        for (Wall wall: wallPair) {
-            wall.update();
+        if (MyGDXGame.getGameMode() == GameMode.GAME) {
+            for (Wall wall : wallPair) {
+                wall.update();
+            }
         }
     }
 
     public boolean checkIntersection(Bird bird) {
-
-        Wall closest = getClosestWall();
-
-        if (checkFront(bird, closest) ||
-                checkTop(bird, closest) ||
-                checkBottom(bird, closest) ||
-                checkBack(bird, closest))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean checkFront(Bird bird, Wall closest) {
-        if (bird.getPos().x + Bird.getWidth() >= closest.pos1.x &&
-                bird.getPos().x + Bird.getWidth() <= closest.pos1.x + WALL_WIDTH) {
-            return true;
+        for (Wall wall: wallPair) {
+            if (isInside(bird, wall))
+                return true;
         }
         return false;
     }
 
-    private boolean checkBack(Bird bird, Wall closest) {
-        if (bird.getPos().x >= closest.pos1.x &&
-                bird.getPos().x <= closest.pos1.x + WALL_WIDTH) {
-            return true;
+    private boolean isInside(Bird bird, Wall closest) {
+        if (checkFront(bird, closest) || checkBack(bird, closest)) {
+            if (checkTop(bird, closest) || checkBottom(bird, closest))
+                return true;
         }
         return false;
     }
 
     private boolean checkTop(Bird bird, Wall closest) {
-        if (bird.getPos().y + Bird.getHeight() >= closest.pos1.y &&
-                bird.getPos().y + Bird.getHeight() >= closest.pos1.y + WALL_HEIGHT) {
-            return true;
-        }
-        return false;
+        return (bird.getPos().y + Bird.getHeight() >= closest.top.y);
     }
 
     private boolean checkBottom(Bird bird, Wall closest) {
-        if (bird.getPos().y >= closest.pos1.y &&
-                bird.getPos().y >= closest.pos1.y + WALL_HEIGHT) {
-            return true;
-        }
-        return false;
+        return (bird.getPos().y <= closest.bottom.y + WALL_HEIGHT);
+    }
+
+    private boolean checkFront(Bird bird, Wall closest) {
+        return (bird.getPos().x + Bird.getWidth() >= closest.top.x
+                && bird.getPos().x + Bird.getWidth() <= closest.top.x + WALL_WIDTH);
+    }
+
+    private boolean checkBack(Bird bird, Wall closest) {
+        return (bird.getPos().x >= closest.top.x && bird.getPos().x <= closest.top.x + WALL_WIDTH);
     }
 
     public void dispose() {
         for (Wall wall: wallPair) {
             wall.dispose();
         }
-    }
-
-    public Wall getClosestWall() {
-        int birdPos = Bird.getPosX();
-        float minPos = 2000;
-        for (Wall wall: wallPair) {
-            if (wall.pos1.x < minPos && wall.pos1.x >= birdPos) {
-                minPos = wall.pos1.x;
-            }
-        }
-        for (Wall wall: wallPair) {
-            if (minPos == wall.pos1.x) {
-                return wall;
-            }
-        }
-        return null;
     }
 
     public static int getHeight() {

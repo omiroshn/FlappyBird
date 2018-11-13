@@ -12,7 +12,7 @@ public class Atlas {
     private Vector2 pos;
     private Vector2 wh;
 
-    Atlas(String path, int width, int height, int x, int y) {
+    public Atlas(String path, int width, int height, int x, int y) {
         atlas = new TextureAtlas(Gdx.files.internal(path));
         atlasRegion = atlas.findRegion("0001");
         pos = new Vector2(x, y);
@@ -38,5 +38,7 @@ public class Atlas {
         return true;
     }
 
-
+    public void dispose() {
+        atlas.dispose();
+    }
 }

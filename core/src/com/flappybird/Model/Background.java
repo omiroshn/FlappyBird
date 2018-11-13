@@ -19,7 +19,7 @@ public class Background implements Drawable {
     private int speed;
 
     public Background(boolean randomMode) {
-        atlas = new TextureAtlas(Gdx.files.internal("background.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("atl/background.atlas"));
         String night = randomMode ? "0001" : "0002";
         atlasRegion = atlas.findRegion(night);
         pos1 = new Vector2(0,0);

@@ -1,7 +1,6 @@
 package com.flappybird.Model;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +11,7 @@ public class Bird implements Drawable {
     private final static int BIRD_WIDTH = 68;
     private final static int BIRD_HEIGTH = 48;
     private final static float START_X = Gdx.graphics.getWidth() / 2 - (BIRD_WIDTH / 2) - 100;
-    private final static float START_Y = Gdx.graphics.getHeight() / 2 + 100;
+    private final static float START_Y = Gdx.graphics.getHeight() / 2 + 50;
 
     private Animation<TextureAtlas.AtlasRegion> birdAnimation;
     private TextureAtlas birdAnimAtlas;
@@ -22,16 +21,17 @@ public class Bird implements Drawable {
 
     private float vy;
     private float gravity;
+    private boolean falling;
 
     public Bird() {
-        birdAnimAtlas = new TextureAtlas(Gdx.files.internal("bird.atlas"));
+        birdAnimAtlas = new TextureAtlas(Gdx.files.internal("atl/bird.atlas"));
         birdAnimation = new Animation<TextureAtlas.AtlasRegion>(1/10f, birdAnimAtlas.getRegions());
         pos = new Vector2(START_X, START_Y);
         wh = new Vector2(BIRD_WIDTH, BIRD_HEIGTH);
         vy = 0;
         gravity = -0.5f;
         elapsedTime = 0;
-
+        falling = true;
     }
 
     public void default_() {
@@ -53,17 +53,24 @@ public class Bird implements Drawable {
     }
 
     public void update() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-//            vy = 10;
-//            //todo delete this after dead sign
-//            if (pos.y <= Ground.getHeight())
-//                pos.y += vy;
-//        }
-        if (pos.y + vy > Ground.getHeight()) {
-            vy += gravity;
-            pos.y += vy;
-        } else {
-            pos.y = Ground.getHeight();
+        if (MyGDXGame.getGameMode() == GameMode.GAME) {
+            if (pos.y + vy > Ground.getHeight()) {
+                vy += gravity;
+                pos.y += vy;
+            } else {
+                pos.y = Ground.getHeight();
+            }
+        } else if (MyGDXGame.getGameMode() == GameMode.MENU) {
+            if (falling) {
+                pos.y -= 1.5;
+            } else {
+                pos.y += 1.5;
+            }
+            if (pos.y == 430.5) {
+                falling = false;
+            } else if (pos.y == 471) {
+                falling = true;
+            }
         }
     }
 

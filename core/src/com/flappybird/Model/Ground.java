@@ -18,7 +18,7 @@ public class Ground implements Drawable {
     private int speed;
 
     public Ground() {
-        atlas = new TextureAtlas(Gdx.files.internal("ground.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("atl/ground.atlas"));
         atlasRegion = atlas.findRegion("0001");
         pos1 = new Vector2(0,0);
         pos2 = new Vector2(GROUND_WIDTH,0);
