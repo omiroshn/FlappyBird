@@ -1,12 +1,13 @@
-package com.flappybird;
+package com.flappybird.Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.flappybird.View.MyGDXGame;
 
-public class Bird {
+public class Bird implements Drawable {
 
     private final int BIRD_WIDTH = 68;
     private final int BIRD_HEIGTH = 48;
@@ -23,7 +24,7 @@ public class Bird {
     private float gravity;
     private boolean tap;
 
-    Bird() {
+    public Bird() {
         birdAnimAtlas = new TextureAtlas(Gdx.files.internal("bird.atlas"));
         birdAnimation = new Animation<TextureAtlas.AtlasRegion>(1/10f, birdAnimAtlas.getRegions());
         pos = new Vector2(START_X, START_Y);
@@ -55,6 +56,7 @@ public class Bird {
     public void update() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             vy = 10;
+            //todo delete this after dead sign
             if (pos.y <= Ground.getHeight())
                 pos.y += vy;
         }
@@ -64,6 +66,10 @@ public class Bird {
         } else {
             pos.y = Ground.getHeight();
         }
+    }
+
+    public void dispose() {
+        birdAnimAtlas.dispose();
     }
 
     public int getWidth() {

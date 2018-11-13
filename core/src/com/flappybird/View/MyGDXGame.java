@@ -1,20 +1,24 @@
-package com.flappybird;
+package com.flappybird.View;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.flappybird.Model.Background;
+import com.flappybird.Model.Bird;
+import com.flappybird.Model.Ground;
+import com.flappybird.Model.Obstacles;
 
 import java.util.Random;
 
 public class MyGDXGame extends ApplicationAdapter {
-	static SpriteBatch batch;
-	Background background;
-	Ground ground;
-	Bird bird;
-	Obstacles obs;
-	boolean randomMode;
+	static public SpriteBatch batch;
+	private Background background;
+	private Ground ground;
+	private Bird bird;
+	private Obstacles obs;
+	private boolean randomMode;
 
 	@Override
 	public void create () {
@@ -39,7 +43,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		batch.end();
 	}
 
-	public void update() {
+	private void update() {
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 			Gdx.app.exit();
 		background.update();
@@ -50,6 +54,10 @@ public class MyGDXGame extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
+		bird.dispose();
+		ground.dispose();
+		obs.dispose();
+		background.dispose();
 		batch.dispose();
 	}
 }

@@ -1,13 +1,14 @@
-package com.flappybird;
+package com.flappybird.Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.flappybird.View.MyGDXGame;
 
 import java.util.Random;
 
-public class Obstacles {
+public class Obstacles implements Drawable {
 
     private final static int WALL_WIDTH = 104;
     private final static int WALL_HEIGHT = 640;
@@ -58,6 +59,10 @@ public class Obstacles {
             );
         }
 
+        private void dispose() {
+            atlas.dispose();
+        }
+
         private void loadTextures() {
             atlas = new TextureAtlas(Gdx.files.internal("wall.atlas"));
             wall1 = atlas.findRegion("0001");
@@ -91,6 +96,12 @@ public class Obstacles {
     public void update() {
         for (Wall wall: wallPair) {
             wall.update();
+        }
+    }
+
+    public void dispose() {
+        for (Wall wall: wallPair) {
+            wall.dispose();
         }
     }
 
