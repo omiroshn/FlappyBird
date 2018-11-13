@@ -9,10 +9,10 @@ import com.flappybird.View.MyGDXGame;
 
 public class Bird implements Drawable {
 
-    private final int BIRD_WIDTH = 68;
-    private final int BIRD_HEIGTH = 48;
-    private final float START_X = Gdx.graphics.getWidth() / 2 - (BIRD_WIDTH / 2) - 100;
-    private final float START_Y = Gdx.graphics.getHeight() / 2 + 100;
+    private final static int BIRD_WIDTH = 68;
+    private final static int BIRD_HEIGTH = 48;
+    private final static float START_X = Gdx.graphics.getWidth() / 2 - (BIRD_WIDTH / 2) - 100;
+    private final static float START_Y = Gdx.graphics.getHeight() / 2 + 100;
 
     private Animation<TextureAtlas.AtlasRegion> birdAnimation;
     private TextureAtlas birdAnimAtlas;
@@ -22,7 +22,6 @@ public class Bird implements Drawable {
 
     private float vy;
     private float gravity;
-    private boolean tap;
 
     public Bird() {
         birdAnimAtlas = new TextureAtlas(Gdx.files.internal("bird.atlas"));
@@ -54,12 +53,12 @@ public class Bird implements Drawable {
     }
 
     public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            vy = 10;
-            //todo delete this after dead sign
-            if (pos.y <= Ground.getHeight())
-                pos.y += vy;
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+//            vy = 10;
+//            //todo delete this after dead sign
+//            if (pos.y <= Ground.getHeight())
+//                pos.y += vy;
+//        }
         if (pos.y + vy > Ground.getHeight()) {
             vy += gravity;
             pos.y += vy;
@@ -68,15 +67,37 @@ public class Bird implements Drawable {
         }
     }
 
+    public void checkIntersection(Obstacles.Wall[] walls) {
+//        for (Obstacles.Wall wall: walls) {
+//
+//        }
+    }
+
+    public void Fly() {
+        vy = 10;
+    }
+
     public void dispose() {
         birdAnimAtlas.dispose();
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return BIRD_WIDTH;
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return BIRD_HEIGTH;
+    }
+
+    public static int getPosX() {
+        return BIRD_WIDTH;
+    }
+
+    public static int getPosY() {
+        return BIRD_HEIGTH;
+    }
+
+    public Vector2 getPos() {
+        return pos;
     }
 }
