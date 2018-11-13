@@ -1,0 +1,18 @@
+atlas.png
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+0001
+    rotate: false
+    xy: 112, 646
+    size: 52, 320
+    orig: 52, 320
+    offset: 0, 0
+    index: -1
+0002
+    rotate: false
+    xy: 168, 646
+    size: 52, 320
+    orig: 52, 320
+    offset: 0, 0
+    index: -1
