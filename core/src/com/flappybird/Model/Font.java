@@ -10,7 +10,7 @@ public class Font {
     private BitmapFont font;
 
     public Font() {
-        font = new BitmapFont(Gdx.files.internal("flappyBird.fnt"));
+        font = new BitmapFont(Gdx.files.internal("fbfont.fnt"));
         font.setColor(Color.WHITE);
     }
 

@@ -3,6 +3,9 @@ package com.flappybird.Model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.flappybird.View.MyGDXGame;
 
@@ -24,23 +27,47 @@ public class Obstacles implements Drawable {
         private Vector2 top;
         private Vector2 bottom;
         private Vector2 wh;
+        private Rectangle topRect;
+        private Rectangle botRect;
         private int speed;
+        private boolean checked;
 
         Wall(int offset) {
             loadTextures();
+            topRect = new Rectangle();
+            botRect = new Rectangle();
             top = new Vector2(START_X + offset, getRandomHeight());
             bottom = new Vector2(START_X + offset, top.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
             wh = new Vector2(WALL_WIDTH, WALL_HEIGHT);
+            updateRect();
             speed = 4;
+            checked = false;
         }
 
         private void update() {
             top.x -= speed;
             bottom.x -= speed;
+            updateRect();
             if (top.x <= -WALL_WIDTH) {
                 top = new Vector2(START_X + DISTANCE_BTW_WALLS, getRandomHeight());
                 bottom = new Vector2(START_X + DISTANCE_BTW_WALLS, top.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
             }
+            updateRect();
+        }
+
+        private void updateRect() {
+            topRect.set(
+                    top.x,
+                    top.y,
+                    wh.x,
+                    wh.y
+            );
+            botRect.set(
+                    bottom.x,
+                    bottom.y,
+                    wh.x,
+                    wh.y
+            );
         }
 
         private void draw() {
@@ -75,6 +102,30 @@ public class Obstacles implements Drawable {
             int upper = Gdx.graphics.getHeight()  - (Ground.getHeight() / 2);
             return new Random().nextInt(upper - lower) + lower;
         }
+
+        public Rectangle getTopRect() {
+            return topRect;
+        }
+
+        public Rectangle getBotRect() {
+            return botRect;
+        }
+
+        public boolean isNotChecked() {
+            return !checked;
+        }
+
+        public float getPosX() {
+            return top.x;
+        }
+    }
+
+    public void default_() {
+        int offset = 300;
+        for (int i = 0; i < wallPair.length; i++) {
+            wallPair[i] = new Wall(offset);
+            offset += DISTANCE_BTW_WALLS;
+        }
     }
 
     private Wall wallPair[];
@@ -102,37 +153,19 @@ public class Obstacles implements Drawable {
         }
     }
 
-    public boolean checkIntersection(Bird bird) {
+    public boolean checkIntersection(MyGDXGame game, Bird bird) {
+        Circle c = bird.getCircle();
+        float x = bird.getPos().x;
         for (Wall wall: wallPair) {
-            if (isInside(bird, wall))
+            if (wall.isNotChecked() && (x > wall.getPosX())) {
+                wall.checked = true;
+                game.setScore(game.getScore() + 1);
+            }
+            if (Intersector.overlaps(c, wall.getBotRect())
+                    || Intersector.overlaps(c, wall.getTopRect()))
                 return true;
         }
         return false;
-    }
-
-    private boolean isInside(Bird bird, Wall closest) {
-        if (checkFront(bird, closest) || checkBack(bird, closest)) {
-            if (checkTop(bird, closest) || checkBottom(bird, closest))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean checkTop(Bird bird, Wall closest) {
-        return (bird.getPos().y + Bird.getHeight() >= closest.top.y);
-    }
-
-    private boolean checkBottom(Bird bird, Wall closest) {
-        return (bird.getPos().y <= closest.bottom.y + WALL_HEIGHT);
-    }
-
-    private boolean checkFront(Bird bird, Wall closest) {
-        return (bird.getPos().x + Bird.getWidth() >= closest.top.x
-                && bird.getPos().x + Bird.getWidth() <= closest.top.x + WALL_WIDTH);
-    }
-
-    private boolean checkBack(Bird bird, Wall closest) {
-        return (bird.getPos().x >= closest.top.x && bird.getPos().x <= closest.top.x + WALL_WIDTH);
     }
 
     public void dispose() {
@@ -140,6 +173,8 @@ public class Obstacles implements Drawable {
             wall.dispose();
         }
     }
+
+    public Wall[] getWallPair() { return wallPair; }
 
     public static int getHeight() {
         return WALL_HEIGHT;

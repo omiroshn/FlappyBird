@@ -15,8 +15,8 @@ public class Atlas {
     public Atlas(String path, int width, int height, int x, int y) {
         atlas = new TextureAtlas(Gdx.files.internal(path));
         atlasRegion = atlas.findRegion("0001");
-        pos = new Vector2(x, y);
         wh = new Vector2(width, height);
+        pos = new Vector2(x, y);
     }
 
     public void draw() {
@@ -30,12 +30,11 @@ public class Atlas {
     }
 
     public boolean isClicked(float x, float y) {
-//        if (
-//                x >= pos.x && x <= pos.y &&
-//                y <= Gdx
-//                )
-
-        return true;
+//        System.out.println("Mouse pos:" + x + " " + y);
+//        System.out.println("Pic pos:" + pos.x + " " + pos.y);
+//        System.out.println("Pic pos ends:" + pos.x + wh.x + " " + pos.y + wh.y);
+        return (x >= pos.x && x <= pos.x + wh.x
+                && y >= pos.y && y <= pos.y + wh.y);
     }
 
     public void dispose() {
