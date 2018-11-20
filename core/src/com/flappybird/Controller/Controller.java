@@ -2,10 +2,11 @@ package com.flappybird.Controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.flappybird.Model.GameMode;
 import com.flappybird.View.MyGDXGame;
 
-public class Controller {
+public class Controller implements InputProcessor {
 
     private MyGDXGame game;
 
@@ -13,43 +14,86 @@ public class Controller {
         this.game = game;
     }
 
-    public void update() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+    //keyboard events
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.ESCAPE)
             Gdx.app.exit();
-        if (MyGDXGame.getGameMode() == GameMode.FIRSTVIEW) {
-            if (Gdx.input.isTouched()) {
-                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    game.getBird().setBirdPos();
-                    game.setGameMode(GameMode.MENU);
-                } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    game.setGameMode(GameMode.RECORDS);
-                }
+        else if (MyGDXGame.getGameMode() == GameMode.GAME) {
+            if (keycode == Input.Keys.SPACE)
+                game.getBird().Fly();
+        }
+        else if (MyGDXGame.getGameMode() == GameMode.MENU) {
+            if (keycode == Input.Keys.SPACE) {
+                game.setGameMode(GameMode.GAME);
+                game.getBird().Fly();
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && MyGDXGame.getGameMode() == GameMode.GAME) {
-            game.getBird().Fly();
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    //mouse events
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (MyGDXGame.getGameMode() == GameMode.FIRSTVIEW) {
+            if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                game.getBird().setBirdPos();
+                game.setGameMode(GameMode.MENU);
+            } else if (game.getRecordsPic().isClicked(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                game.setGameMode(GameMode.RECORDS);
+            }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && MyGDXGame.getGameMode() == GameMode.MENU) {
+        else if (MyGDXGame.getGameMode() == GameMode.MENU) {
             game.setGameMode(GameMode.GAME);
             game.getBird().Fly();
         }
-        if (MyGDXGame.getGameMode() == GameMode.DEAD) {
-            if (Gdx.input.isTouched()) {
-                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    game.getBird().default_();
-                    game.getObs().default_();
-                    game.setGameMode(GameMode.MENU);
-                    game.setScore(0);
-                } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    game.setGameMode(GameMode.RECORDS);
-                }
+        else if (MyGDXGame.getGameMode() == GameMode.DEAD) {
+            if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                game.getBird().default_();
+                game.getObs().default_();
+                game.setGameMode(GameMode.MENU);
+                game.setScore(0);
+            } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                game.setGameMode(GameMode.RECORDS);
             }
         }
-        if (MyGDXGame.getGameMode() == GameMode.RECORDS) {
-            if (Gdx.input.isTouched()) {
-                System.out.println("RECORDS MODE");
-                game.setGameMode(GameMode.DEAD);
-            }
+        else if (MyGDXGame.getGameMode() == GameMode.RECORDS) {
+            System.out.println("RECORDS MODE");
+            game.setGameMode(GameMode.DEAD);
         }
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (MyGDXGame.getGameMode() == GameMode.GAME) {
+            game.getBird().Fly();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

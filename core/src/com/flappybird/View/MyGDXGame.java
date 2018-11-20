@@ -42,6 +42,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		obs = new Obstacles();
 		scoreFont = new Font();
 		controller = new Controller(this);
+		Gdx.input.setInputProcessor(controller);
 		gameMode = GameMode.FIRSTVIEW;
 		score = 0;
 		flappyBirdLogo = new Atlas(
@@ -99,28 +100,27 @@ public class MyGDXGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		//todo bird rotation
 	//todo bird falling +
-		//todo score count
-		//todo score font
+	//todo score count +
+	//todo score font +
+	//todo clickable buttons +
+
 		//todo score displaying in table
 		//todo database
-		//todo clickable buttons
 		//todo medals
-		//todo firstfiev
-		//todo change skins
+		//todo viewController
+		//todo меняющиеся скины рандомно!
 		//todo music
 
-
-		//todo меняющиеся скины рандомно!
-
+		//todo bird rotation
 		//todo Птица повернута в соответствующую сторону движения,
 		// т.е. падая — птица смотрит внизу, взлетая — вверх.
 		// Анимация (взмах крыльями) присутствует только когда птица летит вверх.
+
+
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		controller.update();
 		switch (gameMode) {
 			case FIRSTVIEW:
 				renderViewController();

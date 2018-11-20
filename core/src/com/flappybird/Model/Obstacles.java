@@ -51,6 +51,7 @@ public class Obstacles implements Drawable {
             if (top.x <= -WALL_WIDTH) {
                 top = new Vector2(START_X + DISTANCE_BTW_WALLS, getRandomHeight());
                 bottom = new Vector2(START_X + DISTANCE_BTW_WALLS, top.y - SPACE_BETWEEN_WALLS - WALL_HEIGHT);
+                checked = false;
             }
             updateRect();
         }
@@ -60,7 +61,7 @@ public class Obstacles implements Drawable {
                     top.x,
                     top.y,
                     wh.x,
-                    wh.y
+                    wh.y + 1000
             );
             botRect.set(
                     bottom.x,
