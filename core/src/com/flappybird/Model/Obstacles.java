@@ -112,13 +112,14 @@ public class Obstacles implements Drawable {
             return botRect;
         }
 
-        public boolean isNotChecked() {
+        private boolean isNotChecked() {
             return !checked;
         }
 
-        public float getPosX() {
+        private float getPosX() {
             return top.x;
         }
+
     }
 
     public void default_() {
@@ -133,11 +134,7 @@ public class Obstacles implements Drawable {
 
     public Obstacles() {
         wallPair = new Wall[NUMBER_OF_WALLS];
-        int offset = 300;
-        for (int i = 0; i < wallPair.length; i++) {
-            wallPair[i] = new Wall(offset);
-            offset += DISTANCE_BTW_WALLS;
-        }
+        default_();
     }
 
     public void draw() {

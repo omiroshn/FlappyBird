@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.flappybird.Controller.Controller;
 import com.flappybird.Model.*;
-import com.flappybird.Model.Font;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MyGDXGame extends ApplicationAdapter {
@@ -23,6 +23,7 @@ public class MyGDXGame extends ApplicationAdapter {
 	private static GameMode gameMode;
 	private int score;
 	private Controller controller;
+	private DatabaseFB databaseFB;
 
 	private Atlas flappyBirdLogo;
 	private Atlas scorePic;
@@ -43,6 +44,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		scoreFont = new Font();
 		controller = new Controller(this);
 		Gdx.input.setInputProcessor(controller);
+		databaseFB = new DatabaseFB("score.db");
 		gameMode = GameMode.FIRSTVIEW;
 		score = 0;
 		flappyBirdLogo = new Atlas(
@@ -104,19 +106,21 @@ public class MyGDXGame extends ApplicationAdapter {
 	//todo score count +
 	//todo score font +
 	//todo clickable buttons +
-
-		//todo score displaying in table
-		//todo database
-		//todo medals
-		//todo viewController
-		//todo меняющиеся скины рандомно!
-		//todo music
+	//todo databaseFB +
+	//todo viewController +
 
 		//todo bird rotation
 		//todo Птица повернута в соответствующую сторону движения,
 		// т.е. падая — птица смотрит внизу, взлетая — вверх.
 		// Анимация (взмах крыльями) присутствует только когда птица летит вверх.
 
+
+		//todo score displaying in table
+		//todo new label
+		//todo medals
+		//add drawing shit to other class in main
+		//todo меняющиеся скины рандомно!
+		//todo music
 
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -125,6 +129,9 @@ public class MyGDXGame extends ApplicationAdapter {
 			case FIRSTVIEW:
 				renderViewController();
 				break;
+			case MENU_RECORDS:
+				renderMenuRecords();
+				break;
 			case MENU:
 				renderMenu();
 				break;
@@ -132,7 +139,7 @@ public class MyGDXGame extends ApplicationAdapter {
 				renderGame();
 				break;
 			case RECORDS:
-				renderRecords();
+				renderGameRecords();
 				break;
 			case DEAD:
 				renderDead();
@@ -162,7 +169,6 @@ public class MyGDXGame extends ApplicationAdapter {
 	}
 
 	private void renderViewController() {
-
 		update();
 		background.draw();
 		ground.draw();
@@ -211,24 +217,49 @@ public class MyGDXGame extends ApplicationAdapter {
 				Gdx.graphics.getHeight() / 2 + 52,
 				1f
 		);
-		int bestScore = 0;
 		scoreFont.draw(
-				Integer.toString(bestScore),
+				Integer.toString(databaseFB.getMaxScoreFromTable()),
 				Gdx.graphics.getWidth() / 2 + 120,
 				Gdx.graphics.getHeight() / 2 - 12,
 				1f
 		);
 	}
 
-	private void renderRecords() {
+	private void renderMenuRecords() {
+		update();
+		background.draw();
+		obs.draw();
+		ground.draw();
+		playPic.draw();
+		recordsPic.draw();
+		drawTopFiveRecords();
+	}
+
+	private void renderGameRecords() {
+		bird.update();
 		background.draw();
 		obs.draw();
 		ground.draw();
 		bird.draw();
 		gameOverPic.draw();
-		scorePic.draw();
 		playPic.draw();
 		recordsPic.draw();
+		drawTopFiveRecords();
+	}
+
+	private void drawTopFiveRecords() {
+		ArrayList<Integer> r = databaseFB.getTopFiveFromTable();
+
+		int offset = Gdx.graphics.getHeight() / 2 + 300;
+		for (Integer i : r) {
+			scoreFont.draw(
+					Integer.toString(i),
+					Gdx.graphics.getWidth() / 2 + 120,
+					offset,
+					1f
+			);
+			offset -= 30;
+		}
 	}
 
 	private void update() {
@@ -237,12 +268,14 @@ public class MyGDXGame extends ApplicationAdapter {
 		ground.update();
 		bird.update();
 		if (obs.checkIntersection(this, bird)) {
+			databaseFB.insertValueToTable(score);
 			gameMode = GameMode.DEAD;
 		}
 	}
 	
 	@Override
 	public void dispose () {
+		databaseFB.closeConnection();
 		batch.dispose();
 		scoreFont.dispose();
 		bird.dispose();

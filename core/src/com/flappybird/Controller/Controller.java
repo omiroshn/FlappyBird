@@ -45,31 +45,39 @@ public class Controller implements InputProcessor {
     //mouse events
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (MyGDXGame.getGameMode() == GameMode.FIRSTVIEW) {
-            if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                game.getBird().setBirdPos();
-                game.setGameMode(GameMode.MENU);
-            } else if (game.getRecordsPic().isClicked(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                game.setGameMode(GameMode.RECORDS);
-            }
-        }
-        else if (MyGDXGame.getGameMode() == GameMode.MENU) {
-            game.setGameMode(GameMode.GAME);
-            game.getBird().Fly();
-        }
-        else if (MyGDXGame.getGameMode() == GameMode.DEAD) {
-            if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                game.getBird().default_();
-                game.getObs().default_();
-                game.setGameMode(GameMode.MENU);
-                game.setScore(0);
-            } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                game.setGameMode(GameMode.RECORDS);
-            }
-        }
-        else if (MyGDXGame.getGameMode() == GameMode.RECORDS) {
-            System.out.println("RECORDS MODE");
-            game.setGameMode(GameMode.DEAD);
+        switch (MyGDXGame.getGameMode()) {
+            case FIRSTVIEW:
+                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.getBird().setBirdPos();
+                    game.setGameMode(GameMode.MENU);
+                } else if (game.getRecordsPic().isClicked(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.setGameMode(GameMode.MENU_RECORDS);
+                }
+                break;
+            case MENU_RECORDS:
+                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.setGameMode(GameMode.FIRSTVIEW);
+                }
+                break;
+            case MENU:
+                game.setGameMode(GameMode.GAME);
+                game.getBird().Fly();
+                break;
+            case DEAD:
+                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.getBird().default_();
+                    game.getObs().default_();
+                    game.setGameMode(GameMode.MENU);
+                    game.setScore(0);
+                } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.setGameMode(GameMode.RECORDS);
+                }
+                break;
+            case RECORDS:
+                if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.setGameMode(GameMode.DEAD);
+                }
+                break;
         }
         return false;
     }

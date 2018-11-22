@@ -98,7 +98,7 @@ public class Bird implements Drawable {
             } else {
                 game.setGameMode(GameMode.DEAD);
             }
-        } else if (MyGDXGame.getGameMode() == GameMode.DEAD) {
+        } else if (MyGDXGame.getGameMode() == GameMode.DEAD || MyGDXGame.getGameMode() == GameMode.RECORDS) {
             birdAnimation.setFrameDuration(100000);
             if (pos.y + vy > Ground.getHeight()) {
                 vy += gravity;
