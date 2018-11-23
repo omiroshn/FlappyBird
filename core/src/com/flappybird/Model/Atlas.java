@@ -30,9 +30,6 @@ public class Atlas {
     }
 
     public boolean isClicked(float x, float y) {
-//        System.out.println("Mouse pos:" + x + " " + y);
-//        System.out.println("Pic pos:" + pos.x + " " + pos.y);
-//        System.out.println("Pic pos ends:" + pos.x + wh.x + " " + pos.y + wh.y);
         return (x >= pos.x && x <= pos.x + wh.x
                 && y >= pos.y && y <= pos.y + wh.y);
     }

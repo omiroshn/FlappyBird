@@ -49,15 +49,30 @@ public class DatabaseFB {
         }
     }
 
-    public void insertValueToTable(int value) {
-        String sql = "INSERT INTO score_table VALUES(?);";
+    public boolean checkIfValueExists(int value) {
+        String sql = "SELECT * FROM score_table WHERE score = " + value + ";";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
-        {
-            preparedStatement.setInt(1, value);
-            preparedStatement.executeUpdate();
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            if (!resultSet.isBeforeFirst())
+                return false;
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return true;
+    }
+
+    public void insertValueToTable(int value) {
+        boolean exists = checkIfValueExists(value);
+
+        if (exists == false && value != 0) {
+            String sql = "INSERT INTO score_table VALUES(?);";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, value);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -75,7 +90,7 @@ public class DatabaseFB {
     }
 
     public ArrayList<Integer> getTopFiveFromTable() {
-        String sql = "SELECT * FROM score_table ORDER BY score DESC LIMIT 5;";
+        String sql = "SELECT DISTINCT * FROM score_table ORDER BY score DESC LIMIT 5;";
 
         ArrayList<Integer> n = new ArrayList<>();
         try (Statement statement = connection.createStatement();

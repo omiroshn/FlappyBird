@@ -28,6 +28,13 @@ public class Controller implements InputProcessor {
                 game.setGameMode(GameMode.GAME);
                 game.getBird().Fly();
             }
+        } else if (MyGDXGame.getGameMode() == GameMode.DEAD) {
+            if (keycode == Input.Keys.ENTER) {
+                game.getBird().default_();
+                game.getObs().default_();
+                game.setGameMode(GameMode.MENU);
+                game.setScore(0);
+            }
         }
         return false;
     }

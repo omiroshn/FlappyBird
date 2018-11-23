@@ -32,6 +32,9 @@ public class MyGDXGame extends ApplicationAdapter {
 	private Atlas recordsPic;
 	private Atlas tap_tap;
 	private Atlas getReady;
+	private Atlas highScores;
+	private Atlas newLabel;
+	private Medal medalGameOver;
 
 	@Override
 	public void create () {
@@ -96,8 +99,26 @@ public class MyGDXGame extends ApplicationAdapter {
 				(Gdx.graphics.getWidth() - 276) / 2,
 				(Gdx.graphics.getHeight() - 75) / 2 + 200
 		);
-
+		highScores = new Atlas(
+				"atl/highscores.atlas",
+				339,
+				250,
+				(Gdx.graphics.getWidth() - 339) / 2,
+				(Gdx.graphics.getHeight() - 250) / 2 + 40
+		);
+		newLabel = new Atlas(
+				"atl/newLabel.atlas",
+				48,
+				21,
+				(Gdx.graphics.getWidth() - 48) / 2 + 55,
+				(Gdx.graphics.getHeight() - 21) / 2 + 8
+		);
 		shape = new ShapeRenderer();
+
+		medalGameOver = new Medal(
+				(Gdx.graphics.getWidth() - 66) / 2 - 100,
+				(Gdx.graphics.getHeight() - 66) / 2 + 10
+		);
 	}
 
 	@Override
@@ -108,19 +129,22 @@ public class MyGDXGame extends ApplicationAdapter {
 	//todo clickable buttons +
 	//todo databaseFB +
 	//todo viewController +
+	//todo score displaying in table +
+	//todo medals unlock +
+
+		//todo new label
+
+
+		//add drawing shit to other class in main
+
+		//todo меняющиеся скины рандомно! или сделать пикер скинов (долго)
+
+		//todo music
 
 		//todo bird rotation
 		//todo Птица повернута в соответствующую сторону движения,
 		// т.е. падая — птица смотрит внизу, взлетая — вверх.
 		// Анимация (взмах крыльями) присутствует только когда птица летит вверх.
-
-
-		//todo score displaying in table
-		//todo new label
-		//todo medals
-		//add drawing shit to other class in main
-		//todo меняющиеся скины рандомно!
-		//todo music
 
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -223,6 +247,12 @@ public class MyGDXGame extends ApplicationAdapter {
 				Gdx.graphics.getHeight() / 2 - 12,
 				1f
 		);
+		//todo проверять на new label только 1 раз
+		//todo убрать костыли score != 0
+		if (score == databaseFB.getMaxScoreFromTable() && score != 0)
+			newLabel.draw();
+		if (score >= 10)
+			medalGameOver.draw(score);
 	}
 
 	private void renderMenuRecords() {
@@ -231,7 +261,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		obs.draw();
 		ground.draw();
 		playPic.draw();
-		recordsPic.draw();
+		highScores.draw();
 		drawTopFiveRecords();
 	}
 
@@ -243,18 +273,18 @@ public class MyGDXGame extends ApplicationAdapter {
 		bird.draw();
 		gameOverPic.draw();
 		playPic.draw();
-		recordsPic.draw();
+		highScores.draw();
 		drawTopFiveRecords();
 	}
 
 	private void drawTopFiveRecords() {
 		ArrayList<Integer> r = databaseFB.getTopFiveFromTable();
 
-		int offset = Gdx.graphics.getHeight() / 2 + 300;
+		int offset = Gdx.graphics.getHeight() / 2 + 100;
 		for (Integer i : r) {
 			scoreFont.draw(
 					Integer.toString(i),
-					Gdx.graphics.getWidth() / 2 + 120,
+					Gdx.graphics.getWidth() / 2 - 110,
 					offset,
 					1f
 			);
@@ -289,6 +319,9 @@ public class MyGDXGame extends ApplicationAdapter {
 		recordsPic.dispose();
 		tap_tap.dispose();
 		getReady.dispose();
+		highScores.dispose();
+		newLabel.dispose();
+		medalGameOver.dispose();
 	}
 
 	public Background getBackground() {
