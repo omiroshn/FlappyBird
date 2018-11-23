@@ -248,8 +248,7 @@ public class MyGDXGame extends ApplicationAdapter {
 				1f
 		);
 		//todo проверять на new label только 1 раз
-		//todo убрать костыли score != 0
-		if (score == databaseFB.getMaxScoreFromTable() && score != 0)
+		if (score == databaseFB.getMaxScoreFromTable())
 			newLabel.draw();
 		if (score >= 10)
 			medalGameOver.draw(score);

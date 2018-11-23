@@ -65,7 +65,7 @@ public class DatabaseFB {
     public void insertValueToTable(int value) {
         boolean exists = checkIfValueExists(value);
 
-        if (exists == false && value != 0) {
+        if (exists == false) {
             String sql = "INSERT INTO score_table VALUES(?);";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setInt(1, value);
@@ -90,7 +90,7 @@ public class DatabaseFB {
     }
 
     public ArrayList<Integer> getTopFiveFromTable() {
-        String sql = "SELECT DISTINCT * FROM score_table ORDER BY score DESC LIMIT 5;";
+        String sql = "SELECT DISTINCT * FROM score_table WHERE score NOT LIKE 0 ORDER BY score DESC LIMIT 5;";
 
         ArrayList<Integer> n = new ArrayList<>();
         try (Statement statement = connection.createStatement();
