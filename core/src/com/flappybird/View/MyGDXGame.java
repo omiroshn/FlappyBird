@@ -24,6 +24,7 @@ public class MyGDXGame extends ApplicationAdapter {
 	private int score;
 	private Controller controller;
 	private DatabaseFB databaseFB;
+	private boolean newRecordAchieved;
 
 	private Atlas flappyBirdLogo;
 	private Atlas scorePic;
@@ -34,7 +35,7 @@ public class MyGDXGame extends ApplicationAdapter {
 	private Atlas getReady;
 	private Atlas highScores;
 	private Atlas newLabel;
-	private Medal medalGameOver;
+	private Medal medal;
 
 	@Override
 	public void create () {
@@ -115,11 +116,32 @@ public class MyGDXGame extends ApplicationAdapter {
 		);
 		shape = new ShapeRenderer();
 
-		medalGameOver = new Medal(
+		medal = new Medal(
 				(Gdx.graphics.getWidth() - 66) / 2 - 100,
 				(Gdx.graphics.getHeight() - 66) / 2 + 10
 		);
 	}
+
+	/*
+	BEGIN TRANSACTION;
+
+	CREATE TABLE IF NOT EXISTS score_table(
+			score integer
+	);
+
+	INSERT INTO score_table VALUES(1);
+	INSERT INTO score_table VALUES(2);
+	INSERT INTO score_table VALUES(1);
+	INSERT INTO score_table VALUES(0);
+	INSERT INTO score_table VALUES(0);
+	COMMIT;
+
+	//SELECT MAX(score) FROM score_table;
+	//SELECT * FROM score_table ORDER BY score DESC LIMIT 5;
+	//SELECT * FROM score_table WHERE score = 3;
+
+	SELECT DISTINCT * FROM score_table WHERE score NOT LIKE 0 ORDER BY score DESC LIMIT 5;
+	*/
 
 	@Override
 	public void render () {
@@ -131,20 +153,16 @@ public class MyGDXGame extends ApplicationAdapter {
 	//todo viewController +
 	//todo score displaying in table +
 	//todo medals unlock +
+	//todo new label +
+	//todo medals unlock in table records +
 
-		//todo new label
-
-
-		//add drawing shit to other class in main
-
-		//todo меняющиеся скины рандомно! или сделать пикер скинов (долго)
+		//todo skin picker
+		//todo or
+		//todo меняющиеся скины рандомно
 
 		//todo music
 
-		//todo bird rotation
-		//todo Птица повернута в соответствующую сторону движения,
-		// т.е. падая — птица смотрит внизу, взлетая — вверх.
-		// Анимация (взмах крыльями) присутствует только когда птица летит вверх.
+		//add drawing shit to other class in main
 
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -247,11 +265,10 @@ public class MyGDXGame extends ApplicationAdapter {
 				Gdx.graphics.getHeight() / 2 - 12,
 				1f
 		);
-		//todo проверять на new label только 1 раз
-		if (score == databaseFB.getMaxScoreFromTable())
+		if (newRecordAchieved)
 			newLabel.draw();
 		if (score >= 10)
-			medalGameOver.draw(score);
+			medal.draw(score);
 	}
 
 	private void renderMenuRecords() {
@@ -262,6 +279,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		playPic.draw();
 		highScores.draw();
 		drawTopFiveRecords();
+		medal.drawUnlockedMedals(databaseFB.getMaxScoreFromTable());
 	}
 
 	private void renderGameRecords() {
@@ -274,6 +292,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		playPic.draw();
 		highScores.draw();
 		drawTopFiveRecords();
+		medal.drawUnlockedMedals(databaseFB.getMaxScoreFromTable());
 	}
 
 	private void drawTopFiveRecords() {
@@ -297,6 +316,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		ground.update();
 		bird.update();
 		if (obs.checkIntersection(this, bird)) {
+			newRecordAchieved = databaseFB.checkNewMaxScore(score);
 			databaseFB.insertValueToTable(score);
 			gameMode = GameMode.DEAD;
 		}
@@ -320,7 +340,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		getReady.dispose();
 		highScores.dispose();
 		newLabel.dispose();
-		medalGameOver.dispose();
+		medal.dispose();
 	}
 
 	public Background getBackground() {

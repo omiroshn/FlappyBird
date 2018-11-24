@@ -73,7 +73,18 @@ public class DatabaseFB {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         }
+    }
+
+    public boolean checkNewMaxScore(int value) {
+        boolean exists = checkIfValueExists(value);
+
+        if (exists == false) {
+            if (value > getMaxScoreFromTable())
+                return true;
+        }
+        return false;
     }
 
     public int getMaxScoreFromTable() {

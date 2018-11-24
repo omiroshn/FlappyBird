@@ -49,6 +49,45 @@ public class Medal {
         );
     }
 
+    public void drawUnlockedMedals(int max) {
+        if (max >= 10) {
+            MyGDXGame.batch.draw(
+                atlasRegion1,
+                Gdx.graphics.getWidth() / 2 - 37,
+                Gdx.graphics.getHeight() / 2 + 35,
+                wh.x,
+                wh.y
+            );
+        }
+        if (max >= 20) {
+            MyGDXGame.batch.draw(
+                atlasRegion2,
+                Gdx.graphics.getWidth() / 2 - 37,
+                Gdx.graphics.getHeight() / 2 - 35,
+                wh.x,
+                wh.y
+            );
+        }
+        if (max >= 30) {
+            MyGDXGame.batch.draw(
+                atlasRegion3,
+                Gdx.graphics.getWidth() / 2 + 32,
+                Gdx.graphics.getHeight() / 2 + 35,
+                wh.x,
+                wh.y
+            );
+        }
+        if (max >= 40) {
+            MyGDXGame.batch.draw(
+                atlasRegion4,
+               Gdx.graphics.getWidth() / 2 + 32,
+               Gdx.graphics.getHeight() / 2 - 35,
+                wh.x,
+                wh.y
+            );
+        }
+    }
+
     public void dispose() {
         atlas.dispose();
     }
