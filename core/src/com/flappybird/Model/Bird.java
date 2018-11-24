@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.flappybird.View.MyGDXGame;
 
+import java.util.Objects;
+
 
 public class Bird implements Drawable {
 
@@ -50,6 +52,17 @@ public class Bird implements Drawable {
         pos = new Vector2(START_X, START_Y);
     }
 
+    public void setNewSkin(String skinName) {
+        if (Objects.equals(skinName, "orange")) {
+            birdAnimAtlas = new TextureAtlas(Gdx.files.internal("atl/bird.atlas"));
+        } else if (Objects.equals(skinName, "blue")) {
+            birdAnimAtlas = new TextureAtlas(Gdx.files.internal("atl/birdblue.atlas"));
+        } else if (Objects.equals(skinName, "red")) {
+            birdAnimAtlas = new TextureAtlas(Gdx.files.internal("atl/birdred.atlas"));
+        }
+        birdAnimation = new Animation<TextureAtlas.AtlasRegion>(1/10f, birdAnimAtlas.getRegions());
+    }
+
     public void draw() {
         elapsedTime += Gdx.graphics.getDeltaTime();
         MyGDXGame.batch.draw(
@@ -68,7 +81,7 @@ public class Bird implements Drawable {
 
     public void update() {
         if (MyGDXGame.getGameMode() == GameMode.FIRSTVIEW) {
-            birdAnimation.setFrameDuration(1 / 10f);
+            turnOnAnimation();
             if (falling) {
                 pos.y -= 1.5;
             } else {
@@ -80,7 +93,7 @@ public class Bird implements Drawable {
                 falling = true;
             }
         } else if (MyGDXGame.getGameMode() == GameMode.MENU) {
-            birdAnimation.setFrameDuration(1 / 10f);
+            turnOnAnimation();
             if (falling) {
                 pos.y -= 1.5;
             } else {
@@ -99,7 +112,7 @@ public class Bird implements Drawable {
                 game.setGameMode(GameMode.DEAD);
             }
         } else if (MyGDXGame.getGameMode() == GameMode.DEAD || MyGDXGame.getGameMode() == GameMode.RECORDS) {
-            birdAnimation.setFrameDuration(100000);
+            turnOffAnimation();
             if (pos.y + vy > Ground.getHeight()) {
                 vy += gravity;
                 pos.y += vy;
@@ -110,6 +123,10 @@ public class Bird implements Drawable {
                 float off = percent * BIRD_HEIGHT / 100;
                 pos.y = Ground.getHeight() - off;
             }
+        } else if (MyGDXGame.getGameMode() == GameMode.SKINS) {
+            turnOffAnimation();
+            pos.x = (Gdx.graphics.getWidth() - BIRD_WIDTH) / 2;
+            pos.y = (Gdx.graphics.getHeight() - BIRD_HEIGHT) / 2 - 150;
         }
         updateCircle();
     }
@@ -120,6 +137,14 @@ public class Bird implements Drawable {
                 pos.y + (BIRD_HEIGHT / 2),
                 25.0f
         );
+    }
+
+    private void turnOffAnimation() {
+        birdAnimation.setFrameDuration(100000);
+    }
+
+    private void turnOnAnimation() {
+        birdAnimation.setFrameDuration(1 / 10f);
     }
 
     public void Fly() {

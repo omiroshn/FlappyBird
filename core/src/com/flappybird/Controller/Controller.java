@@ -30,11 +30,15 @@ public class Controller implements InputProcessor {
             }
         } else if (MyGDXGame.getGameMode() == GameMode.DEAD) {
             if (keycode == Input.Keys.ENTER) {
-                game.getBird().default_();
-                game.getObs().default_();
-                game.setGameMode(GameMode.MENU);
-                game.setScore(0);
+                resetBird();
             }
+        }
+        if (keycode == Input.Keys.NUM_1) {
+            game.getBird().setNewSkin("orange");
+        } else if (keycode == Input.Keys.NUM_2) {
+            game.getBird().setNewSkin("blue");
+        } else if (keycode == Input.Keys.NUM_3) {
+            game.getBird().setNewSkin("red");
         }
         return false;
     }
@@ -61,21 +65,22 @@ public class Controller implements InputProcessor {
                     game.setGameMode(GameMode.MENU_RECORDS);
                 }
                 break;
+            case MENU:
+                if (game.getPause().isClicked(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.setGameMode(GameMode.SKINS);
+                } else {
+                    game.setGameMode(GameMode.GAME);
+                    game.getBird().Fly();
+                }
+                break;
             case MENU_RECORDS:
                 if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
                     game.setGameMode(GameMode.FIRSTVIEW);
                 }
                 break;
-            case MENU:
-                game.setGameMode(GameMode.GAME);
-                game.getBird().Fly();
-                break;
             case DEAD:
                 if (game.getPlayPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
-                    game.getBird().default_();
-                    game.getObs().default_();
-                    game.setGameMode(GameMode.MENU);
-                    game.setScore(0);
+                    resetBird();
                 } else if (game.getRecordsPic().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
                     game.setGameMode(GameMode.RECORDS);
                 }
@@ -85,6 +90,17 @@ public class Controller implements InputProcessor {
                     game.setGameMode(GameMode.DEAD);
                 }
                 break;
+            case SKINS:
+                if (game.getResume().isClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    resetBird();
+                }
+                if (game.getSkinPickerClass().isOrangeClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.getBird().setNewSkin("orange");
+                } else if (game.getSkinPickerClass().isBlueClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.getBird().setNewSkin("blue");
+                } else if (game.getSkinPickerClass().isRedClicked(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+                    game.getBird().setNewSkin("red");
+                }
         }
         return false;
     }
@@ -110,5 +126,12 @@ public class Controller implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    private void resetBird() {
+        game.getBird().default_();
+        game.getObs().default_();
+        game.setGameMode(GameMode.MENU);
+        game.setScore(0);
     }
 }

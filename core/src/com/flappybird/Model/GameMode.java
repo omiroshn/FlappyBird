@@ -4,6 +4,7 @@ public enum GameMode {
     FIRSTVIEW,
     MENU,
     MENU_RECORDS,
+    SKINS,
     GAME,
     RECORDS,
     DEAD

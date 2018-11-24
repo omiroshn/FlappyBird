@@ -25,6 +25,7 @@ public class MyGDXGame extends ApplicationAdapter {
 	private Controller controller;
 	private DatabaseFB databaseFB;
 	private boolean newRecordAchieved;
+	private SkinPicker skinPickerClass;
 
 	private Atlas flappyBirdLogo;
 	private Atlas scorePic;
@@ -35,6 +36,10 @@ public class MyGDXGame extends ApplicationAdapter {
 	private Atlas getReady;
 	private Atlas highScores;
 	private Atlas newLabel;
+	private Atlas pause;
+	private Atlas resume;
+	private Atlas skinPicker;
+
 	private Medal medal;
 
 	@Override
@@ -47,6 +52,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		obs = new Obstacles();
 		scoreFont = new Font();
 		controller = new Controller(this);
+		skinPickerClass = new SkinPicker();
 		Gdx.input.setInputProcessor(controller);
 		databaseFB = new DatabaseFB("score.db");
 		gameMode = GameMode.FIRSTVIEW;
@@ -120,6 +126,27 @@ public class MyGDXGame extends ApplicationAdapter {
 				(Gdx.graphics.getWidth() - 66) / 2 - 100,
 				(Gdx.graphics.getHeight() - 66) / 2 + 10
 		);
+		pause = new Atlas(
+				"atl/pause.atlas",
+				39,
+				42,
+				(Gdx.graphics.getWidth() - 39) - 10,
+				(Gdx.graphics.getHeight() - 42) - 10
+		);
+		resume = new Atlas(
+				"atl/resume.atlas",
+				39,
+				42,
+				(Gdx.graphics.getWidth() - 39) - 10,
+				(Gdx.graphics.getHeight() - 42) - 10
+		);
+		skinPicker = new Atlas(
+				"atl/skinpicker.atlas",
+				339,
+				171,
+				(Gdx.graphics.getWidth() - 339) / 2,
+				(Gdx.graphics.getHeight() - 171) / 2
+		);
 	}
 
 	/*
@@ -155,13 +182,10 @@ public class MyGDXGame extends ApplicationAdapter {
 	//todo medals unlock +
 	//todo new label +
 	//todo medals unlock in table records +
+	//todo skin picker +
 
-		//todo skin picker
-		//todo or
-		//todo меняющиеся скины рандомно
 
-		//todo music
-
+		//todo add sounds
 		//add drawing shit to other class in main
 
 		Gdx.gl.glClearColor(1, 1, 0, 1);
@@ -171,11 +195,11 @@ public class MyGDXGame extends ApplicationAdapter {
 			case FIRSTVIEW:
 				renderViewController();
 				break;
-			case MENU_RECORDS:
-				renderMenuRecords();
-				break;
 			case MENU:
 				renderMenu();
+				break;
+			case MENU_RECORDS:
+				renderMenuRecords();
 				break;
 			case GAME:
 				renderGame();
@@ -185,6 +209,9 @@ public class MyGDXGame extends ApplicationAdapter {
 				break;
 			case DEAD:
 				renderDead();
+				break;
+			case SKINS:
+				renderSkinsView();
 				break;
 		}
 		batch.end();
@@ -210,6 +237,15 @@ public class MyGDXGame extends ApplicationAdapter {
 //		shape.end();
 	}
 
+	private void renderSkinsView() {
+		bird.update();
+		background.draw();
+		ground.draw();
+		bird.draw();
+		skinPicker.draw();
+		resume.draw();
+	}
+
 	private void renderViewController() {
 		update();
 		background.draw();
@@ -227,6 +263,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		bird.draw();
 		tap_tap.draw();
 		getReady.draw();
+		pause.draw();
 	}
 
 	private void renderGame() {
@@ -297,8 +334,8 @@ public class MyGDXGame extends ApplicationAdapter {
 
 	private void drawTopFiveRecords() {
 		ArrayList<Integer> r = databaseFB.getTopFiveFromTable();
-
 		int offset = Gdx.graphics.getHeight() / 2 + 100;
+
 		for (Integer i : r) {
 			scoreFont.draw(
 					Integer.toString(i),
@@ -341,6 +378,7 @@ public class MyGDXGame extends ApplicationAdapter {
 		highScores.dispose();
 		newLabel.dispose();
 		medal.dispose();
+		skinPicker.dispose();
 	}
 
 	public Background getBackground() {
@@ -366,6 +404,7 @@ public class MyGDXGame extends ApplicationAdapter {
 	public static GameMode getGameMode() {
 		return gameMode;
 	}
+
 	public void setGameMode(GameMode mode) {
 		gameMode = mode;
 	}
@@ -401,4 +440,12 @@ public class MyGDXGame extends ApplicationAdapter {
 	public int getScore() {
 		return score;
 	}
+
+	public int getHighScore() { return databaseFB.getMaxScoreFromTable(); }
+
+	public Medal getMedal() { return medal; }
+
+	public Atlas getPause() {return pause;}
+	public Atlas getResume() {return resume;}
+	public SkinPicker getSkinPickerClass() {return skinPickerClass;}
 }
