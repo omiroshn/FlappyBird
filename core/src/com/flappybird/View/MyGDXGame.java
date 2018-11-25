@@ -150,44 +150,8 @@ public class MyGDXGame extends ApplicationAdapter {
 		);
 	}
 
-	/*
-	BEGIN TRANSACTION;
-
-	CREATE TABLE IF NOT EXISTS score_table(
-			score integer
-	);
-
-	INSERT INTO score_table VALUES(1);
-	INSERT INTO score_table VALUES(2);
-	INSERT INTO score_table VALUES(1);
-	INSERT INTO score_table VALUES(0);
-	INSERT INTO score_table VALUES(0);
-	COMMIT;
-
-	//SELECT MAX(score) FROM score_table;
-	//SELECT * FROM score_table ORDER BY score DESC LIMIT 5;
-	//SELECT * FROM score_table WHERE score = 3;
-
-	SELECT DISTINCT * FROM score_table WHERE score NOT LIKE 0 ORDER BY score DESC LIMIT 5;
-	*/
-
 	@Override
 	public void render () {
-	//todo bird falling +
-	//todo score count +
-	//todo score font +
-	//todo clickable buttons +
-	//todo databaseFB +
-	//todo viewController +
-	//todo score displaying in table +
-	//todo medals unlock +
-	//todo new label +
-	//todo medals unlock in table records +
-	//todo skin picker +
-	//todo add sounds +
-
-		//add drawing shit to other class in main
-
 		Gdx.gl.glClearColor(1, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
@@ -215,26 +179,6 @@ public class MyGDXGame extends ApplicationAdapter {
 				break;
 		}
 		batch.end();
-//		shape.begin(ShapeRenderer.ShapeType.Filled);
-//		shape.setColor(Color.RED);
-//		shape.circle(
-//				bird.getCircle().x,
-//				bird.getCircle().y,
-//				bird.getCircle().radius
-//		);
-//		for (Obstacles.Wall wall: obs.getWallPair()) {
-//			shape.rect(wall.getTopRect().getX(),
-//					wall.getTopRect().getY(),
-//					wall.getTopRect().getWidth(),
-//					wall.getTopRect().getHeight()
-//			);
-//			shape.rect(wall.getBotRect().getX(),
-//					wall.getBotRect().getY(),
-//					wall.getBotRect().getWidth(),
-//					wall.getBotRect().getHeight()
-//			);
-//		}
-//		shape.end();
 	}
 
 	private void renderSkinsView() {
@@ -381,70 +325,30 @@ public class MyGDXGame extends ApplicationAdapter {
 		skinPicker.dispose();
 	}
 
-	public Background getBackground() {
-		return background;
-	}
-
-	public Ground getGround() {
-		return ground;
-	}
-
 	public Bird getBird() {
 		return bird;
 	}
-
 	public Obstacles getObs() {
 		return obs;
 	}
-
-	public boolean isRandomMode() {
-		return randomMode;
-	}
-
 	public static GameMode getGameMode() {
 		return gameMode;
 	}
-
 	public void setGameMode(GameMode mode) {
 		gameMode = mode;
 	}
-
-	public Atlas getScorePic() {
-		return scorePic;
-	}
-
-	public Atlas getGameOverPic() {
-		return gameOverPic;
-	}
-
 	public Atlas getPlayPic() {
 		return playPic;
 	}
-
 	public Atlas getRecordsPic() {
 		return recordsPic;
 	}
-
-	public Atlas getTap_tap() {
-		return tap_tap;
-	}
-
-	public Atlas getGetReady() {
-		return getReady;
-	}
-
 	public void setScore(int score) {
 		this.score = score;
 	}
-
 	public int getScore() {
 		return score;
 	}
-
-	public int getHighScore() { return databaseFB.getMaxScoreFromTable(); }
-
-	public Medal getMedal() { return medal; }
-
 	public Atlas getPause() {return pause;}
 	public Atlas getResume() {return resume;}
 	public SkinPicker getSkinPickerClass() {return skinPickerClass;}
