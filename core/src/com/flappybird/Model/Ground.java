@@ -58,10 +58,6 @@ public class Ground implements Drawable {
         atlas.dispose();
     }
 
-    public static int getWidth() {
-        return GROUND_WIDTH;
-    }
-
     public static int getHeight() {
         return GROUND_HEIGHT;
     }

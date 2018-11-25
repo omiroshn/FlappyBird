@@ -178,15 +178,4 @@ public class Obstacles implements Drawable {
         }
         sounds.dispose();
     }
-
-    public Wall[] getWallPair() { return wallPair; }
-
-    public static int getHeight() {
-        return WALL_HEIGHT;
-    }
-
-    public static int getWidth() {
-        return WALL_WIDTH;
-    }
-
 }
