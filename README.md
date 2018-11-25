@@ -6,7 +6,7 @@
 The game is a side-scroller where the player controls a bird, attempting to fly between columns of green pipes without hitting them.*
 
 Video on YouTube:
-[![Alt text for your video]()](https://youtu.be/l1gX6gMkGeg)
+[![Alt text for your video](https://i.ytimg.com/vi/l1gX6gMkGeg/hqdefault.jpg)](https://youtu.be/l1gX6gMkGeg)
 
 
 Bonuses:
