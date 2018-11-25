@@ -10,7 +10,6 @@ import com.flappybird.View.MyGDXGame;
 
 import java.util.Objects;
 
-
 public class Bird implements Drawable {
 
     private MyGDXGame game;
@@ -134,7 +133,7 @@ public class Bird implements Drawable {
         updateCircle();
     }
 
-    public void updateCircle() {
+    private void updateCircle() {
         boundingCircle.set(
                 pos.x + (BIRD_WIDTH / 2),
                 pos.y + (BIRD_HEIGHT / 2),
@@ -164,26 +163,10 @@ public class Bird implements Drawable {
         birdAnimAtlas.dispose();
     }
 
-    public static int getWidth() {
-        return BIRD_WIDTH;
-    }
-
-    public static int getHeight() {
-        return BIRD_HEIGHT;
-    }
-
     public void setBirdPos() {
         pos.x = START_X;
         pos.y = START_Y;
         updateCircle();
-    }
-
-    public boolean isFalling() {
-        return vy > 110;
-    }
-
-    public boolean sholdntFlap() {
-        return vy > 70;
     }
 
     public Circle getCircle() {
