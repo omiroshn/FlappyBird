@@ -8,19 +8,17 @@ The game is a side-scroller where the player controls a bird, attempting to fly 
 Video on YouTube:
 [![Alt text for your video](https://i.ytimg.com/vi/l1gX6gMkGeg/hqdefault.jpg)](https://youtu.be/l1gX6gMkGeg)
 
+### Bonus :
+- [x] Database to save scores
+- [x] Skin picker view
+- [x] Music & sounds
+- [x] Medals
 
-Bonuses:
-```
-Database to save scores
-Skin picker view
-Music & sounds
-```
-
-<img align="center"  src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/1.png" width="100%" />
-<img align="center"  src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/2.png" width="100%" />
-<img align="center"  src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/3.png" width="100%" />
-<img align="center"  src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/4.png" width="100%" />
-<img align="center"  src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/5.png" width="100%" />
+<img align="center" src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/1.png" width="50%" />
+<img align="center" src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/2.png" width="50%" />
+<img align="center" src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/3.png" width="50%" />
+<img align="center" src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/4.png" width="50%" />
+<img align="center" src="https://github.com/omiroshn/FlappyBird/blob/master/screenshots/5.png" width="50%" />
 
 #                        **  Message to 42 students  **
 You are free to copy, modify and share under your name my exercises. But you
