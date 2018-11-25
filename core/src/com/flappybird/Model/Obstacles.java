@@ -20,6 +20,9 @@ public class Obstacles implements Drawable {
     private final float DISTANCE_BTW_WALLS = 300;
     private final int NUMBER_OF_WALLS = 3;
 
+    private Wall wallPair[];
+    private Music sounds;
+
     public class Wall {
         private TextureRegion wall1;
         private TextureRegion wall2;
@@ -104,11 +107,11 @@ public class Obstacles implements Drawable {
             return new Random().nextInt(upper - lower) + lower;
         }
 
-        public Rectangle getTopRect() {
+        private Rectangle getTopRect() {
             return topRect;
         }
 
-        public Rectangle getBotRect() {
+        private Rectangle getBotRect() {
             return botRect;
         }
 
@@ -122,18 +125,9 @@ public class Obstacles implements Drawable {
 
     }
 
-    public void default_() {
-        int offset = 300;
-        for (int i = 0; i < wallPair.length; i++) {
-            wallPair[i] = new Wall(offset);
-            offset += DISTANCE_BTW_WALLS;
-        }
-    }
-
-    private Wall wallPair[];
-
     public Obstacles() {
         wallPair = new Wall[NUMBER_OF_WALLS];
+        sounds = new Music();
         default_();
     }
 
@@ -158,18 +152,31 @@ public class Obstacles implements Drawable {
             if (wall.isNotChecked() && (x > wall.getPosX())) {
                 wall.checked = true;
                 game.setScore(game.getScore() + 1);
+                sounds.playPointSound();
             }
             if (Intersector.overlaps(c, wall.getBotRect())
-                    || Intersector.overlaps(c, wall.getTopRect()))
+                    || Intersector.overlaps(c, wall.getTopRect())) {
+                sounds.playHitSound();
+                sounds.playDieSound();
                 return true;
+            }
         }
         return false;
+    }
+
+    public void default_() {
+        int offset = 300;
+        for (int i = 0; i < wallPair.length; i++) {
+            wallPair[i] = new Wall(offset);
+            offset += DISTANCE_BTW_WALLS;
+        }
     }
 
     public void dispose() {
         for (Wall wall: wallPair) {
             wall.dispose();
         }
+        sounds.dispose();
     }
 
     public Wall[] getWallPair() { return wallPair; }

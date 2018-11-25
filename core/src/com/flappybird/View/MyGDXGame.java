@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MyGDXGame extends ApplicationAdapter {
+	public static final float VOLUME = 0.2f;
 	static public SpriteBatch batch;
 	static public ShapeRenderer shape;
 	private Background background;
@@ -183,9 +184,8 @@ public class MyGDXGame extends ApplicationAdapter {
 	//todo new label +
 	//todo medals unlock in table records +
 	//todo skin picker +
+	//todo add sounds +
 
-
-		//todo add sounds
 		//add drawing shit to other class in main
 
 		Gdx.gl.glClearColor(1, 1, 0, 1);

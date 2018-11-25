@@ -1,6 +1,7 @@
 package com.flappybird.Model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
@@ -31,12 +32,14 @@ public class Bird implements Drawable {
     private boolean falling;
     private float rotation;
     private Circle boundingCircle;
+    private Sound flap;
 
     public Bird(MyGDXGame game) {
         this.game = game;
         birdAnimAtlas = new TextureAtlas(Gdx.files.internal("atl/bird.atlas"));
         birdAnimation = new Animation<TextureAtlas.AtlasRegion>(1/10f, birdAnimAtlas.getRegions());
         pos = new Vector2(HALFX, HALFY);
+        flap = Gdx.audio.newSound(Gdx.files.internal("audio/wing.ogg"));
         vy = 0;
         gravity = -0.5f;
         elapsedTime = 0;
@@ -148,10 +151,16 @@ public class Bird implements Drawable {
     }
 
     public void Fly() {
+        playFlapSound();
         vy = 10;
     }
 
+    private void playFlapSound() {
+        flap.play(MyGDXGame.VOLUME);
+    }
+
     public void dispose() {
+        flap.dispose();
         birdAnimAtlas.dispose();
     }
 
